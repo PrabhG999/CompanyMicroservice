@@ -3,12 +3,13 @@ package com.example.companyms.Company.Impl;
 import com.example.companyms.Company.Company;
 import com.example.companyms.Company.CompanyRepository;
 import com.example.companyms.Company.CompanyService;
+import com.example.companyms.Company.DTO.CompanyDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -24,11 +25,16 @@ public class CompanyServiceImpl implements CompanyService {
     }
     @Override
     @Transactional
-    public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+    public List<CompanyDTO> getAllCompanies() {
+
+        return companyRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public boolean updateCompany(int id,  Company updateCompany) {
         Optional<Company> companyOptional = companyRepository.findById(id);
         if (companyOptional.isPresent()) {
@@ -53,6 +59,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional
     public boolean deleteCompany(int id) {
         try {
             companyRepository.deleteById(id);
@@ -63,12 +70,28 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company getAllCompaniesById(int id) {
-        return companyRepository.findById(id).orElse(null);
+    public CompanyDTO getAllCompaniesById(int id) {
+
+        Optional<Company> optionalCompany = companyRepository.findById(id);
+        if (optionalCompany.isPresent()) {
+            Company company = optionalCompany.get();
+            return convertToDTO(company);
+        } else {
+            return null;
+        }
+    }
+
+    private CompanyDTO convertToDTO(Company company) {
+        CompanyDTO dto = new CompanyDTO();
+        dto.setCompanyId(company.getId());
+        dto.setName(company.getName());
+        dto.setDescription(company.getDescription());
+        return dto;
     }
 
 
     @Override
+    @Transactional
     public boolean patchCompany(int id,  Company company) {
         Optional<Company> companyOptional = companyRepository.findById(id);
         if (companyOptional.isPresent()) {
