@@ -4,7 +4,9 @@ import com.example.companyms.Company.Company;
 import com.example.companyms.Company.CompanyRepository;
 import com.example.companyms.Company.CompanyService;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
 
     // it tells Spring to automatically inject the dependencies required by that service when it is instantiated.
+    @Autowired
     public CompanyServiceImpl(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
 
