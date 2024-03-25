@@ -1,5 +1,6 @@
 package com.example.companyms.Company;
 
+import com.example.companyms.Company.DTO.CompanyDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,8 @@ public class CompanyController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Company>> getAllCompanies() {
-        List<Company> company = companyService.getAllCompanies();
+    public ResponseEntity<List<CompanyDTO>> getAllCompanies() {
+        List<CompanyDTO> company = companyService.getAllCompanies();
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
@@ -58,8 +59,8 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Company> getAllCompaniesById(@PathVariable int id) {
-        Company company = companyService.getAllCompaniesById(id);
+    public ResponseEntity<CompanyDTO> getAllCompaniesById(@PathVariable int id) {
+        CompanyDTO company = companyService.getAllCompaniesById(id);
         if (company != null) {
             return new ResponseEntity<>(company, HttpStatus.OK);
         } else {
